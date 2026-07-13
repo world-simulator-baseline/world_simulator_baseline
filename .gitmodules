@@ -13,3 +13,6 @@
 [submodule "third_party/GE-Sim-V2"]
 	path = third_party/GE-Sim-V2
 	url = https://github.com/world-simulator-baseline/GE-Sim-V2.git
+[submodule "third_party/WoVR"]
+	path = third_party/WoVR
+	url = https://github.com/world-simulator-baseline/diffsynth-studio.git
