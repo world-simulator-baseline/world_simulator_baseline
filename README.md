@@ -19,6 +19,20 @@ git submodule update --init --recursive
 
 The baseline repositories are available under [`third_party/`](third_party/).
 
+## Baseline Runners
+
+Each baseline provides its main-repository runners under `runners/<baseline>/`.
+
+| File | Purpose |
+| --- | --- |
+| `train.py` | Training runner |
+| `infer.py` | Inference runner |
+| `configs/train.yaml` | Training configuration |
+| `configs/infer.yaml` | Inference configuration |
+
+> [!TIP]
+> `train.py` and `infer.py` are lightweight launch wrappers only; they do not patch or modify baseline source code.
+
 ## Development Workflow
 
 ```text
@@ -45,7 +59,7 @@ The baseline repositories are available under [`third_party/`](third_party/).
 ```
 
 > [!TIP]
-> 💡 Use Codex's `commit-style` skill to generate standardized, single-line commit messages in the `TYPE(SCOPE): SUBJECT` format. Keep them lowercase, imperative, under 50 characters, and without a trailing period.
+> Use Codex's `commit-style` skill to generate standardized, single-line commit messages in the `TYPE(SCOPE): SUBJECT` format. Keep them lowercase, imperative, under 50 characters, and without a trailing period.
 
 Each directory under `third_party/` is an independent Git repository. Make and push baseline-specific changes from inside the corresponding submodule:
 
