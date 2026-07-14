@@ -67,7 +67,7 @@ def _field_stats(data):
 
 def compute_stats(actions, states):
     a, s = np.concatenate(actions), np.concatenate(states)
-    return {"action": _field_stats(a), "observation.state": _field_stats(s)}
+    return {"joint_delta": _field_stats(a), "eef_abs": _field_stats(s)}
 
 
 def _write_pq(table, path):
@@ -107,8 +107,8 @@ def convert_task(task_dir, out, subset, fps, robot_type):
             "frame_index": np.arange(T, dtype=np.int64),
             "timestamp": np.arange(T, dtype=np.float64) / fps,
             "task_index": np.full(T, task_map[descs[ei]], dtype=np.int64),
-            "action": [act[i].tolist() for i in range(T)],
-            "observation.state": [st[i].tolist() for i in range(T)],
+            "joint_delta": [act[i].tolist() for i in range(T)],
+            "eef_abs": [st[i].tolist() for i in range(T)],
         }
         for c in cameras:
             for pk, pv in cam_p[c].items():
@@ -153,8 +153,8 @@ def convert_task(task_dir, out, subset, fps, robot_type):
         "codebase_version": "v3.0", "robot_type": robot_type, "fps": fps,
         "total_episodes": len(eps), "total_frames": gidx,
         "features": {
-            "action": {"dtype": "float64", "shape": [action_dim]},
-            "observation.state": {"dtype": "float64", "shape": [state_dim]},
+            "joint_delta": {"dtype": "float64", "shape": [action_dim]},
+            "eef_abs": {"dtype": "float64", "shape": [state_dim]},
             **cam_f, **cam_param_f,
         },
         "data_path": "data/chunk-{chunk:03d}/file-{file:03d}.parquet",

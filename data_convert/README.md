@@ -48,3 +48,8 @@ The LeRobotDataset v3.0 structure does not replace robot-specific schema definit
 ## Installation
 
 https://huggingface.co/docs/lerobot/installation
+
+## Keywords
+- Mapping: joint_action -> joint_delta; endpose -> eef_abs
+- eef_abs: absolute position(3) + absolute quaternion(4) + gripper(1) 
+- gripper: all values are absolute
