@@ -29,9 +29,10 @@ Each baseline provides its main-repository runners under `runners/<baseline>/`.
 | `infer.py` | Inference runner |
 | `configs/train.yaml` | Training configuration |
 | `configs/infer.yaml` | Inference configuration |
+| `data_convert/robotwin.py` | Convert raw RoboTwin data to the baseline-specific training format |
 
 > [!TIP]
-> `train.py` and `infer.py` are lightweight launch wrappers only; they do not patch or modify baseline source code.
+> `train.py` and `infer.py` are lightweight launch wrappers only; they do not patch or modify baseline source code. Before training, `train.py` calls the dataset-specific converter under `data_convert/`, such as `robotwin.py`, to transform raw data into the format required by the baseline.
 
 ## Development Workflow
 
