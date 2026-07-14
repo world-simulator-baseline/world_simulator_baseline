@@ -21,18 +21,37 @@ The baseline repositories are available under [`third_party/`](third_party/).
 
 ## Baseline Runners
 
-Each baseline provides its main-repository runners under `runners/<baseline>/`.
+Raw robot datasets are converted once into the shared LeRobot format. Each baseline then uses its own data adapter to map LeRobot samples to the format required for training.
 
-| File | Purpose |
+| Path | Purpose |
 | --- | --- |
-| `train.py` | Training runner |
-| `infer.py` | Inference runner |
-| `configs/train.yaml` | Training configuration |
-| `configs/infer.yaml` | Inference configuration |
-| `data_convert/robotwin.py` | Convert raw RoboTwin data to the baseline-specific training format |
+| `data_convert/robotwin.py` | Convert raw RoboTwin data to the shared LeRobot format |
+| `runners/<baseline>/data_adapter.py` | Adapt LeRobot samples to the baseline-specific input format |
+| `runners/<baseline>/train.py` | Load the training configuration, call the data adapter, and launch training |
+| `runners/<baseline>/infer.py` | Load the inference configuration and launch inference |
+| `runners/<baseline>/configs/train.yaml` | Training configuration |
+| `runners/<baseline>/configs/infer.yaml` | Inference configuration |
 
 > [!TIP]
-> `train.py` and `infer.py` are lightweight launch wrappers only; they do not patch or modify baseline source code. Before training, `train.py` calls the dataset-specific converter under `data_convert/`, such as `robotwin.py`, to transform raw data into the format required by the baseline.
+> `train.py`, `infer.py`, and `data_adapter.py` are lightweight wrappers only; they do not patch or modify baseline source code.
+
+### Data Workflow
+
+```text
+Raw RoboTwin data
+        |
+        v
+data_convert/robotwin.py
+        |
+        v
+Shared LeRobot dataset
+        |
+        v
+runners/<baseline>/data_adapter.py
+        |
+        v
+runners/<baseline>/train.py
+```
 
 ## Development Workflow
 
