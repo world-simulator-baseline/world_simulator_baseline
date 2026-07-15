@@ -38,19 +38,41 @@ Raw robot datasets are converted once into the shared LeRobot format. Each basel
 ### Data Workflow
 
 ```text
-Raw RoboTwin data
-        |
-        v
-data_convert/robotwin.py
-        |
-        v
-Shared LeRobot dataset
-        |
-        v
-runners/<baseline>/data_adapter.py
-        |
-        v
-runners/<baseline>/train.py
++-----------------------------------------------------------------+
+| Data Layer 1: Raw RoboTwin                                      |
+| <raw_robotwin_root>/                                            |
++--------------------------------+--------------------------------+
+                                 |
+                                 | Call
+                                 v
++-----------------------------------------------------------------+
+| python data_convert/robotwin.py                                 |
++--------------------------------+--------------------------------+
+                                 |
+                                 v
++-----------------------------------------------------------------+
+| Data Layer 2: LeRobot                                           |
+| <lerobot_root>/                                                 |
+| chmod -R a-w <lerobot_root>/                                    |
++---------+----------------------+----------------------+---------+
+          |                      |                      |
+          v                      v                      v
++-------------------+  +-------------------+  +-------------------+
+| Call              |  | Call              |  | Call              |
+| <baseline_a>/     |  | <baseline_b>/     |  | <baseline_n>/     |
+| data_adapter.py   |  | data_adapter.py   |  | data_adapter.py   |
++---------+---------+  +---------+---------+  +---------+---------+
+          |                      |                      |
+          v                      v                      v
++-------------------+  +-------------------+  +-------------------+
+| Data Layer 3: A   |  | Data Layer 3: B   |  | Data Layer 3: N   |
+| <baseline_a_root>/|  | <baseline_b_root>/|  | <baseline_n_root>/|
++---------+---------+  +---------+---------+  +---------+---------+
+          |                      |                      |
+          v                      v                      v
++-------------------+  +-------------------+  +-------------------+
+| Dataloader A      |  | Dataloader B      |  | Dataloader N      |
++-------------------+  +-------------------+  +-------------------+
 ```
 
 ## Development Workflow
