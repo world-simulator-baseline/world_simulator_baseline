@@ -188,17 +188,21 @@ def main():
                         help="robot model name written to info.json (default: aloha-agilex)")
     args = parser.parse_args()
 
+    origin_lerobot = args.origin.parent / f"{args.origin.name}_lerobot"
+
     tasks = sorted(path for path in args.origin.iterdir()
                    if path.is_dir() and (path / args.subset / "data").exists())
     global_actions, global_states = [], []
     for task_dir in tasks:
         print(f"Converting {task_dir.name}...")
+        output_dir = origin_lerobot / task_dir.name / args.subset
         actions, states = convert_task(
-            task_dir, task_dir / f"{args.subset}_lerobot", args.subset, args.fps, args.robot_type)
+            task_dir, output_dir, args.subset, args.fps, args.robot_type)
         global_actions.extend(actions)
         global_states.extend(states)
 
-    global_stats_path = args.origin / "stats.json"
+    global_stats_path = origin_lerobot / "stats.json"
+    origin_lerobot.mkdir(parents=True, exist_ok=True)
     global_stats_path.write_text(json.dumps(compute_stats(global_actions, global_states), indent=2))
     print(f"Done. Global stats -> {global_stats_path}")
 
