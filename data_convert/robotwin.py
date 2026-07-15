@@ -47,7 +47,8 @@ def encode_video(jpegs, path, fps):
     path.parent.mkdir(parents=True, exist_ok=True)
     process = subprocess.Popen(
         ["ffmpeg", "-y", "-f", "image2pipe", "-framerate", str(fps),
-         "-i", "-", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "22", str(path)],
+         "-i", "-", "-vf", "colorchannelmixer=rr=0:rb=1:br=1:bb=0",
+         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "22", str(path)],
         stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     for jpeg in jpegs:
         process.stdin.write(bytes(jpeg))
