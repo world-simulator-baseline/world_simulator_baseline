@@ -100,7 +100,7 @@ def compute_stats(actions, states):
 # --- Per-episode statistics for meta/episodes_stats.jsonl (LeRobot 2.1) ---
 # These reproduce lerobot.datasets.compute_stats so the output loads with the stock
 # library: numeric features are reduced over time; video features are sampled,
-# downsampled, normalized to [0, 1] and reduced to per-channel shape (3, 1, 1).
+# normalized to [0, 1] and reduced to per-channel shape (3, 1, 1).
 
 
 def _estimate_num_samples(n, min_num=100, max_num=10_000, power=0.75):
@@ -111,14 +111,6 @@ def _estimate_num_samples(n, min_num=100, max_num=10_000, power=0.75):
 
 def _sample_indices(n):
     return np.round(np.linspace(0, n - 1, _estimate_num_samples(n))).astype(int).tolist()
-
-
-def _auto_downsample_hw(chw_image, target=150, max_threshold=300):
-    _, height, width = chw_image.shape
-    if max(height, width) < max_threshold:
-        return chw_image
-    factor = int(width / target) if width > height else int(height / target)
-    return chw_image[:, ::factor, ::factor]
 
 
 def _feature_stats(array, axis, keepdims):
@@ -143,7 +135,7 @@ def _image_stats(jpegs):
             rgb = np.asarray(image.convert("RGB"), dtype=np.uint8)  # (H, W, 3)
         # encode_video() swaps R<->B, so match that channel order for the stats too.
         chw = np.transpose(rgb[:, :, ::-1], (2, 0, 1))              # (3, H, W)
-        frames.append(_auto_downsample_hw(chw))
+        frames.append(chw)
     stats = _feature_stats(np.stack(frames), axis=(0, 2, 3), keepdims=True)
     return {k: v if k == "count" else np.squeeze(v / 255.0, axis=0) for k, v in stats.items()}
 
