@@ -9,7 +9,7 @@ dataset_root/
 ├── meta/
 │   ├── info.json
 │   ├── stats.json
-│   ├── tasks.parquet
+│   ├── tasks.jsonl
 │   └── episodes/
 │       └── chunk-000/
 │           └── file-000.parquet
@@ -31,7 +31,7 @@ dataset_root/
 - `videos/` stores camera streams. Each camera is represented by a separate directory, such as `observation.images.front/` or `observation.images.wrist/`.
 - `meta/info.json` defines dataset features, shapes, data types, FPS, and file path templates.
 - `meta/stats.json` stores statistics for each field, including mean, standard deviation, minimum, and maximum values, for use in normalization.
-- `meta/tasks.parquet` stores natural-language task descriptions and their integer identifiers.
+- `meta/tasks.jsonl` stores natural-language task descriptions and their integer identifiers.
 - `meta/episodes/` stores episode-level metadata, including episode lengths, associated tasks, data locations, and video locations.
 
 ## Robot-Specific Conventions
@@ -43,3 +43,13 @@ The LeRobotDataset v3.0 structure does not replace robot-specific schema definit
 - coordinate frames and rotation representations;
 - the semantic meaning of each action dimension; and
 - any normalization or preprocessing applied during conversion.
+
+
+## Installation
+
+https://huggingface.co/docs/lerobot/installation
+
+## Keywords
+- Mapping: joint_action -> joint_delta; endpose -> eef_abs
+- eef_abs: absolute position(3) + absolute quaternion(4) + gripper(1) 
+- gripper: all values are absolute
