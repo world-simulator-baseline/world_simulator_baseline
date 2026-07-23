@@ -1,0 +1,44 @@
+data:
+  raw_root: /data1/common_data/RoboTwin2.0_640_480/dataset
+  index_root: outputs/wovr/robotwin_subset_2tasks_16episodes
+  subset: aloha-agilex_clean_50
+  width: 640
+  height: 480
+  fps: 30
+  num_frames: 13
+
+action:
+  representation: normalized_absolute_ee_pose_euler
+  dim: 14
+  rotation_representation: euler_xyz
+  rotation_unit: radian
+  statistics_path: /data1/sunyang/datasets/RoboTwin2.0_lerobot/stat.json
+
+model:
+  dit_paths:
+    - /data1/sunyang/models/modelscope/hub/models/Wan-AI/Wan2___2-TI2V-5B/diffusion_pytorch_model-00001-of-00003.safetensors
+    - /data1/sunyang/models/modelscope/hub/models/Wan-AI/Wan2___2-TI2V-5B/diffusion_pytorch_model-00002-of-00003.safetensors
+    - /data1/sunyang/models/modelscope/hub/models/Wan-AI/Wan2___2-TI2V-5B/diffusion_pytorch_model-00003-of-00003.safetensors
+  vae_path: /data1/sunyang/models/modelscope/hub/models/Wan-AI/Wan2___2-TI2V-5B/Wan2.2_VAE.pth
+  trainable_models: dit
+  extra_inputs: input_image,action
+  context_noise_sigma: 0.0
+  static_video_prob: 0.0
+  use_gradient_checkpointing: false
+  use_gradient_checkpointing_offload: false
+  max_timestep_boundary: 1.0
+  min_timestep_boundary: 0.0
+
+training:
+  output_path: outputs/wovr/train_2tasks_16episodes_134epochs_sequential_chunks_normalized_absolute_euler_action_640x480
+  learning_rate: 0.00001
+  weight_decay: 0.01
+  num_epochs: 134
+  dataset_num_workers: 0
+  gradient_accumulation_steps: 4
+  find_unused_parameters: false
+  save_steps: null
+  save_epochs: 67
+  val_interval: 50
+  episode_shuffle_seed: 0
+  remove_prefix_in_ckpt: pipe.dit.
